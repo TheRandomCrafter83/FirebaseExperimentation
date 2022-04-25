@@ -58,19 +58,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private final View.OnClickListener buttonLoadListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            loadFileResult.launch("image/*");
-        }
-    };
+    private final View.OnClickListener buttonLoadListener = view -> loadFileResult.launch("image/*");
 
     private final View.OnClickListener buttonUploadListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if(loadedImageUri == null){
                 textviewError.setVisibility(View.VISIBLE);
-                textviewError.setText("Image uri not set");
+                textviewError.setText(getString(R.string.image_not_set));
                 textviewError.setTextColor(ERROR_COLOR);
                 return;
             }

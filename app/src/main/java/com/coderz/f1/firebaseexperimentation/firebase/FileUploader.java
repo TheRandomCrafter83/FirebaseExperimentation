@@ -6,14 +6,9 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.webkit.MimeTypeMap;
-
 import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+
 
 public class FileUploader {
     public interface FileUploaderListener{
@@ -47,9 +42,7 @@ public class FileUploader {
                 Handler handler = new Handler(Looper.getMainLooper());
                 handler.postDelayed(() -> listener.onProgress(progress),0);
             })
-        .addOnFailureListener(e -> {
-            listener.onFailure(e);
-        })
+        .addOnFailureListener(e -> listener.onFailure(e))
         ;
     }
 }
