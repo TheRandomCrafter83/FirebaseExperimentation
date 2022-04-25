@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
@@ -37,18 +38,14 @@ public class FileUploader {
         StorageReference ref = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(context,fileUri));
         ref.putFile(fileUri)
             .addOnSuccessListener(taskSnapshot -> {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onProgress(0);
-                    }
-                },3000);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(() -> listener.onProgress(0),0);
                 listener.onSuccess(ref.getDownloadUrl().toString());
             })
             .addOnProgressListener(snapshot -> {
                 double progress = 100d * snapshot.getBytesTransferred()/ snapshot.getTotalByteCount();
-                listener.onProgress(progress);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(() -> listener.onProgress(progress),0);
             })
         .addOnFailureListener(e -> {
             listener.onFailure(e);
